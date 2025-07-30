@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  orders    Order[]
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+}
+
+model EventType {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique // Örn: "Concert", "Theatre", "Stand-up"
+  events Event[]
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  name        String
+  date        DateTime  @db.Timestamptz(3)
+  location    String
+  eventTypeId Int
+  eventType   EventType @relation(fields: [eventTypeId], references: [id])
+  tickets     Ticket[]
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+}
+
+model TicketType {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  tickets Ticket[]
+}
+
+model Ticket {
+  id         Int        @id @default(autoincrement())
+  name       String
+  typeId     Int
+  eventId    Int
+  price      Float
+  ticketType TicketType @relation(fields: [typeId], references: [id])
+  event      Event      @relation(fields: [eventId], references: [id])
+  orders     Order[]
+  createdAt  DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime   @updatedAt @db.Timestamptz(3)
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  ticketId  Int
+  quantity  Int
+  total     Float
+  user      User     @relation(fields: [userId], references: [id])
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+}
