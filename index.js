@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import express from "express";
 
 import userRoutes from "./routes/user.route.js";
+import eventRoutes from "./routes/event.route.js";
+import eventTypesRoutes from "./routes/eventType.route.js";
 
 dotenv.config();
 
@@ -13,6 +15,8 @@ app.use(cors());
 app.use(cookieParser());
 
 app.use("/api/user", userRoutes);
+app.use("/api/event", eventRoutes);
+app.use("/api/eventTypes", eventTypesRoutes);
 
 app.get("/", (req, res) => {
   res.send(`
