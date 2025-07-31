@@ -10,7 +10,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/", getAllEventsController);
+router.get("/", getAllEventsController);
 router.get("/:id", getEventByIdController);
 router.post("/create", createEventController);
 router.put("/:id", updateEventController);
