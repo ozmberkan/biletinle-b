@@ -56,3 +56,14 @@ export const deleteOrder = async (id) => {
     },
   });
 };
+
+// Kullanıcı ID'sine göre siparişleri al
+
+export const getOrdersByUserId = async (userId) => {
+  return await prisma.order.findMany({
+    where: { userId },
+    include: {
+      ticket: true,
+    },
+  });
+};

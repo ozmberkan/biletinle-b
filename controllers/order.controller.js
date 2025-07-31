@@ -4,6 +4,7 @@ import {
   getAllOrdersService,
   getOrderByIdService,
   deleteOrderService,
+  getOrdersByUserIdService,
 } from "../services/order.service.js";
 
 export const getAllOrdersController = async (req, res) => {
@@ -111,6 +112,44 @@ export const deleteOrderController = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: deletedOrder,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getOrdersByUserIdController = async (req, res) => {
+  try {
+    const orders = await getOrdersByUserIdService(Number(req.params.userId));
+
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const pageIndex = parseInt(req.query.pageIndex) || 0;
+    const count = orders.length;
+    const page = Math.floor(count / pageSize) + 1;
+
+    const paginatedOrders = orders
+      .slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
+      .sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+
+    const hasPrev = pageIndex > 0;
+    const hasNext = (pageIndex + 1) * pageSize < count;
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        items: paginatedOrders,
+        count,
+        page,
+        pageSize,
+        pageIndex,
+        hasPrev,
+        hasNext,
+      },
     });
   } catch (error) {
     return res.status(500).json({

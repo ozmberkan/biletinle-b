@@ -4,6 +4,7 @@ import {
   updateOrder,
   deleteOrder,
   createOrder,
+  getOrdersByUserId,
 } from "../repositories/order.repo.js";
 
 export const getAllOrdersService = async () => {
@@ -55,6 +56,15 @@ export const deleteOrderService = async (id) => {
       throw new Error(`Bu id ile bir sipariş bulunamadı: ${id}`);
     }
     return order;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getOrdersByUserIdService = async (userId) => {
+  try {
+    const orders = await getOrdersByUserId(userId);
+    return orders;
   } catch (error) {
     throw new Error(error.message);
   }
