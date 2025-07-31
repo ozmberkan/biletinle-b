@@ -3,8 +3,21 @@ import { prisma } from "../prisma/prisma.js";
 export const getAllTickets = async () => {
   return await prisma.ticket.findMany({
     include: {
-      event: true,
-      ticketType: true,
+      event: {
+        select: {
+          name: true,
+          date: true,
+          location: true,
+          createdAt: true,
+          updatedAt: true,
+          eventTypeId: true,
+        },
+      },
+      ticketType: {
+        select: {
+          name: true,
+        },
+      },
       orders: true,
     },
   });
