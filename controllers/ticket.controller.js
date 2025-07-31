@@ -3,6 +3,7 @@ import {
   deleteTicketService,
   getAllTicketsService,
   getTicketByIdService,
+  getTicketsByUserIdService,
   updateTicketService,
 } from "../services/ticket.service.js";
 
@@ -116,6 +117,44 @@ export const getTicketByIdController = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: ticket,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getTicketsByUserIdController = async (req, res) => {
+  try {
+    const tickets = await getTicketsByUserIdService(Number(req.params.userId));
+
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const pageIndex = parseInt(req.query.pageIndex) || 0;
+    const count = tickets.length;
+    const page = Math.floor(count / pageSize) + 1;
+
+    const paginatedTickets = tickets
+      .slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
+      .sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+
+    const hasPrev = pageIndex > 0;
+    const hasNext = (pageIndex + 1) * pageSize < count;
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        items: paginatedTickets,
+        count,
+        page,
+        pageSize,
+        pageIndex,
+        hasPrev,
+        hasNext,
+      },
     });
   } catch (error) {
     return res.status(500).json({

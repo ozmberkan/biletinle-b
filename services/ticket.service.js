@@ -4,6 +4,7 @@ import {
   createTicket,
   deleteTicket,
   updateTicket,
+  getTicketsByUserId,
 } from "../repositories/ticket.repo.js";
 
 export const getAllTicketsService = async () => {
@@ -55,6 +56,15 @@ export const deleteTicketService = async (id) => {
       throw new Error(`Bu id ile bir bilet bulunamadı: ${id}`);
     }
     return ticket;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getTicketsByUserIdService = async (userId) => {
+  try {
+    const tickets = await getTicketsByUserId(userId);
+    return tickets;
   } catch (error) {
     throw new Error(error.message);
   }

@@ -46,3 +46,13 @@ export const deleteTicket = async (id) => {
     },
   });
 };
+
+export const getTicketsByUserId = async (userId) => {
+  return await prisma.ticket.findMany({
+    where: { userId },
+    include: {
+      event: true,
+      ticketType: true,
+    },
+  });
+};
