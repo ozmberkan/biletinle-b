@@ -1,21 +1,21 @@
 import {
-  getAllEventsService,
-  createEventService,
-  deleteEventService,
-  updateEventService,
-  getEventByIdService,
-} from "../services/event.service.js";
+  createTicketService,
+  deleteTicketService,
+  getAllTicketsService,
+  getTicketByIdService,
+  updateTicketService,
+} from "../services/ticket.service.js";
 
-export const getAllEventsController = async (req, res) => {
+export const getAllTicketsController = async (req, res) => {
   try {
-    const events = await getAllEventsService();
+    const tickets = await getAllTicketsService();
 
     const pageSize = parseInt(req.query.pageSize) || 10;
     const pageIndex = parseInt(req.query.pageIndex) || 0;
-    const count = events.length;
+    const count = tickets.length;
     const page = Math.floor(count / pageSize) + 1;
 
-    const paginatedEvents = events
+    const paginatedTickets = tickets
       .slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
       .sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
@@ -27,7 +27,7 @@ export const getAllEventsController = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: {
-        items: paginatedEvents,
+        items: paginatedTickets,
         count,
         page,
         pageSize,
@@ -44,12 +44,12 @@ export const getAllEventsController = async (req, res) => {
   }
 };
 
-export const createEventController = async (req, res) => {
+export const createTicketController = async (req, res) => {
   try {
-    const newEvent = await createEventService(req.body);
+    const newTicket = await createTicketService(req.body);
     return res.status(201).json({
       success: true,
-      data: newEvent,
+      data: newTicket,
     });
   } catch (error) {
     return res.status(500).json({
@@ -59,19 +59,19 @@ export const createEventController = async (req, res) => {
   }
 };
 
-export const deleteEventController = async (req, res) => {
+export const deleteTicketController = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedEvent = await deleteEventService(Number(id));
-    if (!deletedEvent) {
+    const deletedTicket = await deleteTicketService(Number(id));
+    if (!deletedTicket) {
       return res.status(404).json({
         success: false,
-        message: "Event not found",
+        message: "Bilet bulunamadı",
       });
     }
     return res.status(200).json({
       success: true,
-      data: deletedEvent,
+      data: deletedTicket,
     });
   } catch (error) {
     return res.status(500).json({
@@ -81,19 +81,19 @@ export const deleteEventController = async (req, res) => {
   }
 };
 
-export const updateEventController = async (req, res) => {
+export const updateTicketController = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedEvent = await updateEventService(Number(id), req.body);
-    if (!updatedEvent) {
+    const updatedTicket = await updateTicketService(Number(id), req.body);
+    if (!updatedTicket) {
       return res.status(404).json({
         success: false,
-        message: "Event not found",
+        message: "Bilet bulunamadı",
       });
     }
     return res.status(200).json({
       success: true,
-      data: updatedEvent,
+      data: updatedTicket,
     });
   } catch (error) {
     return res.status(500).json({
@@ -103,19 +103,19 @@ export const updateEventController = async (req, res) => {
   }
 };
 
-export const getEventByIdController = async (req, res) => {
+export const getTicketByIdController = async (req, res) => {
   try {
     const { id } = req.params;
-    const event = await getEventByIdService(Number(id));
-    if (!event) {
+    const ticket = await getTicketByIdService(Number(id));
+    if (!ticket) {
       return res.status(404).json({
         success: false,
-        message: "Event not found",
+        message: "Bilet bulunamadı",
       });
     }
     return res.status(200).json({
       success: true,
-      data: event,
+      data: ticket,
     });
   } catch (error) {
     return res.status(500).json({

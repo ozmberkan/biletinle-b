@@ -7,6 +7,7 @@ import eventRoutes from "./routes/event.route.js";
 import eventTypesRoutes from "./routes/eventType.route.js";
 import ticketTypesRoutes from "./routes/ticketType.route.js";
 import userRoutes from "./routes/user.route.js";
+import ticketRoutes from "./routes/ticket.route.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/event", eventRoutes);
 app.use("/api/eventTypes", eventTypesRoutes);
 app.use("/api/ticketTypes", ticketTypesRoutes);
+app.use("/api/ticket", ticketRoutes);
 
 app.get("/", (req, res) => {
   res.send(`
