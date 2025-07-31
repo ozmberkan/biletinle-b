@@ -6,18 +6,6 @@ import {
   getEventByIdService,
 } from "../services/event.service.js";
 
-/*model Event {
-  id          Int       @id @default(autoincrement())
-  name        String
-  date        DateTime  @db.Timestamptz(3)
-  location    String
-  eventTypeId Int
-  eventType   EventType @relation(fields: [eventTypeId], references: [id])
-  tickets     Ticket[]
-  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
-} */
-
 export const getAllEventsController = async (req, res) => {
   try {
     const events = await getAllEventsService();

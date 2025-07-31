@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/", getAllEventTypesController);
 router.get("/:id", getEventTypeByIdController);
-router.post("/create", createEventTypeController);
+router.post("/", createEventTypeController);
 router.put("/:id", updateEventTypeController);
 router.delete("/:id", deleteEventTypeController);
 

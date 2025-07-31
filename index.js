@@ -3,9 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
-import userRoutes from "./routes/user.route.js";
 import eventRoutes from "./routes/event.route.js";
 import eventTypesRoutes from "./routes/eventType.route.js";
+import ticketTypesRoutes from "./routes/ticketType.route.js";
+import userRoutes from "./routes/user.route.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use("/api/user", userRoutes);
 app.use("/api/event", eventRoutes);
 app.use("/api/eventTypes", eventTypesRoutes);
+app.use("/api/ticketTypes", ticketTypesRoutes);
 
 app.get("/", (req, res) => {
   res.send(`
