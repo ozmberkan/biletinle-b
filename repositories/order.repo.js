@@ -4,7 +4,14 @@ export const getAllOrders = async () => {
   return await prisma.order.findMany({
     include: {
       ticket: true,
-      user: true,
+      user: {
+        select: {
+          id: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     },
   });
 };
