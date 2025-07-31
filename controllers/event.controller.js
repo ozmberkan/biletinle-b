@@ -1,40 +1,18 @@
+import { pagination } from "../functions/pagination.js";
 import {
-  getAllEventsService,
   createEventService,
   deleteEventService,
-  updateEventService,
+  getAllEventsService,
   getEventByIdService,
+  updateEventService,
 } from "../services/event.service.js";
 
 export const getAllEventsController = async (req, res) => {
   try {
     const events = await getAllEventsService();
-
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const pageIndex = parseInt(req.query.pageIndex) || 0;
-    const count = events.length;
-    const page = Math.floor(count / pageSize) + 1;
-
-    const paginatedEvents = events
-      .slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
-      .sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-
-    const hasPrev = pageIndex > 0;
-    const hasNext = (pageIndex + 1) * pageSize < count;
-
     return res.status(200).json({
       success: true,
-      data: {
-        items: paginatedEvents,
-        count,
-        page,
-        pageSize,
-        pageIndex,
-        hasPrev,
-        hasNext,
-      },
+      data: pagination(req.query.pageSize, req.query.pageIndex, events),
     });
   } catch (error) {
     return res.status(500).json({

@@ -1,3 +1,4 @@
+import { pagination } from "../functions/pagination.js";
 import {
   createTicketService,
   deleteTicketService,
@@ -11,31 +12,9 @@ export const getAllTicketsController = async (req, res) => {
   try {
     const tickets = await getAllTicketsService();
 
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const pageIndex = parseInt(req.query.pageIndex) || 0;
-    const count = tickets.length;
-    const page = Math.floor(count / pageSize) + 1;
-
-    const paginatedTickets = tickets
-      .slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
-      .sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-
-    const hasPrev = pageIndex > 0;
-    const hasNext = (pageIndex + 1) * pageSize < count;
-
     return res.status(200).json({
       success: true,
-      data: {
-        items: paginatedTickets,
-        count,
-        page,
-        pageSize,
-        pageIndex,
-        hasPrev,
-        hasNext,
-      },
+      data: pagination(req.query.pageSize, req.query.pageIndex, tickets),
     });
   } catch (error) {
     return res.status(500).json({

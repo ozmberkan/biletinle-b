@@ -1,41 +1,20 @@
+import { pagination } from "../functions/pagination.js";
 import {
   createOrderService,
-  updateOrderService,
+  deleteOrderService,
   getAllOrdersService,
   getOrderByIdService,
-  deleteOrderService,
   getOrdersByUserIdService,
+  updateOrderService,
 } from "../services/order.service.js";
 
 export const getAllOrdersController = async (req, res) => {
   try {
     const orders = await getAllOrdersService();
 
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const pageIndex = parseInt(req.query.pageIndex) || 0;
-    const count = orders.length;
-    const page = Math.floor(count / pageSize) + 1;
-
-    const paginatedOrders = orders
-      .slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
-      .sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-
-    const hasPrev = pageIndex > 0;
-    const hasNext = (pageIndex + 1) * pageSize < count;
-
     return res.status(200).json({
       success: true,
-      data: {
-        items: paginatedOrders,
-        count,
-        page,
-        pageSize,
-        pageIndex,
-        hasPrev,
-        hasNext,
-      },
+      data: pagination(req.query.pageSize, req.query.pageIndex, orders),
     });
   } catch (error) {
     return res.status(500).json({
