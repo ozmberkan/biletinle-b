@@ -11,6 +11,7 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
+  role      userRole @default(USER)
   orders    Order[]
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
@@ -65,4 +66,9 @@ model Order {
   user      User     @relation(fields: [userId], references: [id])
   ticket    Ticket   @relation(fields: [ticketId], references: [id])
   createdAt DateTime @default(now()) @db.Timestamptz(3)
+}
+
+enum userRole {
+  USER
+  ADMIN
 }
