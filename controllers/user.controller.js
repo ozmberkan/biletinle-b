@@ -1,3 +1,4 @@
+import { response } from "../functions/response.js";
 import {
   getUserByIdService,
   loginService,
@@ -11,16 +12,15 @@ export const registerController = async (req, res) => {
 
     const { password, ...userWithoutPassword } = user;
 
-    return res.status(201).json({
-      success: true,
-      message: "",
-      data: userWithoutPassword,
-    });
+    response(
+      201,
+      true,
+      "Kullanıcı başarıyla oluşturuldu",
+      userWithoutPassword,
+      res
+    );
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    response(500, false, error.message, null, res);
   }
 };
 
@@ -31,16 +31,9 @@ export const loginController = async (req, res) => {
 
     const { password, ...userWithoutPassword } = user;
 
-    return res.status(200).json({
-      success: true,
-      message: "",
-      data: userWithoutPassword,
-    });
+    response(200, true, "Giriş başarılı", userWithoutPassword, res);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    response(500, false, error.message, null, res);
   }
 };
 
@@ -51,15 +44,8 @@ export const getUserByIdController = async (req, res) => {
 
     const { password, ...userWithoutPassword } = user;
 
-    return res.status(200).json({
-      success: true,
-      message: "",
-      data: userWithoutPassword,
-    });
+    response(200, true, "", userWithoutPassword, res);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    response(500, false, error.message, null, res);
   }
 };

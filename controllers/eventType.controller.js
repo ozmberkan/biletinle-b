@@ -5,13 +5,14 @@ import {
   deleteEventTypeService,
   updateEventTypeService,
 } from "../services/eventType.service.js";
+import { response } from "../functions/response.js";
 
 export const getAllEventTypesController = async (req, res) => {
   try {
     const eventTypes = await getAllEventTypesService();
-    res.status(200).json({ success: true, message: "", data: eventTypes });
+    response(200, true, "", eventTypes, res);
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    response(500, false, error.message, null, res);
   }
 };
 
@@ -19,9 +20,9 @@ export const getEventTypeByIdController = async (req, res) => {
   const { id } = req.params;
   try {
     const eventType = await getEventTypeByIdService(id);
-    res.status(200).json({ success: true, message: "", data: eventType });
+    response(200, true, "", eventType, res);
   } catch (error) {
-    res.status(404).json({ success: false, message: error.message });
+    response(404, false, error.message, null, res);
   }
 };
 
@@ -29,13 +30,15 @@ export const createEventTypeController = async (req, res) => {
   const data = req.body;
   try {
     const newEventType = await createEventTypeService(data);
-    res.status(201).json({
-      success: true,
-      message: "Etkinlik türü başarıyla oluşturuldu",
-      data: newEventType,
-    });
+    response(
+      201,
+      true,
+      "Etkinlik türü başarıyla oluşturuldu",
+      newEventType,
+      res
+    );
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    response(500, false, error.message, null, res);
   }
 };
 
@@ -44,13 +47,15 @@ export const updateEventTypeController = async (req, res) => {
   const data = req.body;
   try {
     const updatedEventType = await updateEventTypeService(id, data);
-    res.status(200).json({
-      success: true,
-      message: "Etkinlik türü başarıyla güncellendi",
-      data: updatedEventType,
-    });
+    response(
+      200,
+      true,
+      "Etkinlik türü başarıyla güncellendi",
+      updatedEventType,
+      res
+    );
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    response(500, false, error.message, null, res);
   }
 };
 
@@ -58,8 +63,8 @@ export const deleteEventTypeController = async (req, res) => {
   const { id } = req.params;
   try {
     await deleteEventTypeService(id);
-    res.status(204).send();
+    response(204, true, "", null, res);
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    response(500, false, error.message, null, res);
   }
 };

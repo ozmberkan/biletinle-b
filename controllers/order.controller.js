@@ -1,4 +1,5 @@
 import { pagination } from "../functions/pagination.js";
+import { response } from "../functions/response.js";
 import {
   createOrderService,
   deleteOrderService,
@@ -12,15 +13,15 @@ export const getAllOrdersController = async (req, res) => {
   try {
     const orders = await getAllOrdersService();
 
-    return res.status(200).json({
-      success: true,
-      data: pagination(req.query.pageSize, req.query.pageIndex, orders),
-    });
+    return response(
+      200,
+      true,
+      "",
+      pagination(req.query.pageSize, req.query.pageIndex, orders),
+      res
+    );
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return response(500, false, error.message, null, res);
   }
 };
 
@@ -29,30 +30,18 @@ export const getOrderByIdController = async (req, res) => {
     const { id } = req.params;
     const order = await getOrderByIdService(Number(id));
 
-    return res.status(200).json({
-      success: true,
-      data: order,
-    });
+    return response(200, true, "", order, res);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return response(500, false, error.message, null, res);
   }
 };
 
 export const createOrderController = async (req, res) => {
   try {
     const order = await createOrderService(req.body);
-    return res.status(201).json({
-      success: true,
-      data: order,
-    });
+    return response(201, true, "", order, res);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return response(500, false, error.message, null, res);
   }
 };
 
@@ -60,21 +49,10 @@ export const updateOrderController = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedOrder = await updateOrderService(Number(id), req.body);
-    if (!updatedOrder) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      data: updatedOrder,
-    });
+
+    return response(200, true, "", updatedOrder, res);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return response(500, false, error.message, null, res);
   }
 };
 
@@ -82,21 +60,9 @@ export const deleteOrderController = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedOrder = await deleteOrderService(Number(id));
-    if (!deletedOrder) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      data: deletedOrder,
-    });
+    return response(200, true, "", deletedOrder, res);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return response(500, false, error.message, null, res);
   }
 };
 
@@ -104,36 +70,14 @@ export const getOrdersByUserIdController = async (req, res) => {
   try {
     const orders = await getOrdersByUserIdService(Number(req.params.userId));
 
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const pageIndex = parseInt(req.query.pageIndex) || 0;
-    const count = orders.length;
-    const page = Math.floor(count / pageSize) + 1;
-
-    const paginatedOrders = orders
-      .slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
-      .sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-
-    const hasPrev = pageIndex > 0;
-    const hasNext = (pageIndex + 1) * pageSize < count;
-
-    return res.status(200).json({
-      success: true,
-      data: {
-        items: paginatedOrders,
-        count,
-        page,
-        pageSize,
-        pageIndex,
-        hasPrev,
-        hasNext,
-      },
-    });
+    return response(
+      200,
+      true,
+      "",
+      pagination(req.query.pageSize, req.query.pageIndex, orders),
+      res
+    );
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return response(500, false, error.message, null, res);
   }
 };
